@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список моніторів</title>
+</head>
+<body>
+    <h1>Список моніторів</h1>
+    <button onclick="getMonitors()">Отримати список моніторів</button>
+    <div id="monitorList"></div>
+
+    <script>
+        function getMonitors() {
+            fetch('/category/monitors')
+                .then(response => response.json())
+                .then(data => {
+                    const monitorListDiv = document.getElementById('monitorList');
+                    monitorListDiv.innerHTML = '';
+
+                    if (data.monitors) {
+                        const monitors = data.monitors;
+                        const ul = document.createElement('ul');
+                        monitors.forEach(monitor => {
+                            const li = document.createElement('li');
+                            li.textContent = `ID: ${monitor[0]}, Назва: ${monitor[1]}`;
+                            ul.appendChild(li);
+                        });
+                        monitorListDiv.appendChild(ul);
+                    } else {
+                        monitorListDiv.textContent = 'Не вдалося отримати список моніторів.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Помилка:', error);
+                });
+        }
+    </script>
+</body>
+</html>
